@@ -18,8 +18,15 @@ class TennisGame1:
         if self.p1points == self.p2points:
             result = self._convert_tie_points_to_tennis_score(self.p1points)
         elif self.p1points >= 4 or self.p2points >= 4:
-            result = self._return_advantage_or_winner(self.p1points, self.p2points,
-                                                      self.player_1_name, self.player_2_name)
+            if self.p1points > self.p2points:
+                player_in_advantage = self.player_1_name
+            else:
+                player_in_advantage = self.player_2_name
+            if abs(self.p1points - self.p2points) >= 2:
+                result = self._return_winner(player_in_advantage)
+            else:
+                result = self._return_advantage(player_in_advantage)
+
         else:
             result = self._covert_intermediate_points_to_tennis_score(self.p1points, self.p2points)
         return result
@@ -50,15 +57,9 @@ class TennisGame1:
         return result
 
     @staticmethod
-    def _return_advantage_or_winner(p1points, p2points, player_1_name, player_2_name):
-        minus_result = p1points - p2points
+    def _return_advantage(player_name):
+        return "Advantage " + player_name
 
-        if minus_result == 1:
-            result = "Advantage " + player_1_name
-        elif minus_result == -1:
-            result = "Advantage " + player_2_name
-        elif minus_result >= 2:
-            result = "Win for " + player_1_name
-        else:
-            result = "Win for " + player_2_name
-        return result
+    @staticmethod
+    def _return_winner(player_name):
+        return "Win for " + player_name
