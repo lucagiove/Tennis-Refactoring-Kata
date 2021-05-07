@@ -17,11 +17,7 @@ class TennisGame1:
     def score(self):
         result = ""
         if self.p1points == self.p2points:
-            result = {
-                0: "Love-All",
-                1: "Fifteen-All",
-                2: "Thirty-All",
-            }.get(self.p1points, "Deuce")
+            result = self._convert_tie_points_to_tennis_score(self.p1points)
         elif self.p1points >= 4 or self.p2points >= 4:
             minus_result = self.p1points - self.p2points
             if minus_result == 1:
@@ -46,3 +42,11 @@ class TennisGame1:
                     3: "Forty",
                 }[temp_score]
         return result
+
+    @staticmethod
+    def _convert_tie_points_to_tennis_score(points1):
+        return {
+            0: "Love-All",
+            1: "Fifteen-All",
+            2: "Thirty-All",
+        }.get(points1, "Deuce")
