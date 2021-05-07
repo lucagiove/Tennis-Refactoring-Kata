@@ -29,18 +29,7 @@ class TennisGame1:
             else:
                 result = "Win for " + self.player2Name
         else:
-            for i in range(1, 3):
-                if i == 1:
-                    temp_score = self.p1points
-                else:
-                    result += "-"
-                    temp_score = self.p2points
-                result += {
-                    0: "Love",
-                    1: "Fifteen",
-                    2: "Thirty",
-                    3: "Forty",
-                }[temp_score]
+            result = self._covert_intermediate_points_to_tennis_score(self.p1points, self.p2points)
         return result
 
     @staticmethod
@@ -50,3 +39,20 @@ class TennisGame1:
             1: "Fifteen-All",
             2: "Thirty-All",
         }.get(points1, "Deuce")
+
+    @staticmethod
+    def _covert_intermediate_points_to_tennis_score(p1points, p2points):
+        result = ""
+        for i in range(1, 3):
+            if i == 1:
+                temp_score = p1points
+            else:
+                result += "-"
+                temp_score = p2points
+            result += {
+                0: "Love",
+                1: "Fifteen",
+                2: "Thirty",
+                3: "Forty",
+            }[temp_score]
+        return result
