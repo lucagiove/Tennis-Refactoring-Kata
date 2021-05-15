@@ -15,6 +15,11 @@ class TennisGame1:
             self.p2points += 1
 
     def score(self):
+        scoreData = self._compute_score()
+        result = self._print_score(scoreData)
+        return result
+
+    def _compute_score(self):
         if self.p1points == self.p2points:
             result = self._convert_tie_points_to_tennis_score(self.p1points)
         elif self.p1points >= 4 or self.p2points >= 4:
@@ -29,6 +34,10 @@ class TennisGame1:
 
         else:
             result = self._covert_intermediate_points_to_tennis_score(self.p1points, self.p2points)
+        return result
+
+    def _print_score(self, scoreData):
+        result = scoreData
         return result
 
     @staticmethod
