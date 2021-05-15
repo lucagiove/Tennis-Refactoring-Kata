@@ -15,29 +15,42 @@ class TennisGame1:
             self.p2points += 1
 
     def score(self):
-        scoreData = self._compute_score()
-        result = self._print_score(scoreData)
+        result, score_data = self._compute_score()
+        result = self._print_score(score_data, result)
         return result
 
     def _compute_score(self):
-        if self.p1points == self.p2points:
-            result = self._convert_tie_points_to_tennis_score(self.p1points)
-        elif self.p1points >= 4 or self.p2points >= 4:
-            if self.p1points > self.p2points:
-                player_in_advantage = self.player_1_name
-            else:
-                player_in_advantage = self.player_2_name
-            if abs(self.p1points - self.p2points) >= 2:
-                result = self._return_winner(player_in_advantage)
-            else:
-                result = self._return_advantage(player_in_advantage)
+        score_data = {}
+        result = None
 
+        if self.p1points >= 4 or self.p2points >= 4:
+            score_data['advantage_mode'] = True
+            if self.p1points == self.p2points:
+                score_data['player_in_advantage'] = False
+            else:
+                if self.p1points > self.p2points:
+                    score_data['player_in_advantage'] = self.player_1_name
+                else:
+                    score_data['player_in_advantage'] = self.player_2_name
+                if abs(self.p1points - self.p2points) >= 2:
+                    score_data['game_over'] = True
         else:
-            result = self._covert_intermediate_points_to_tennis_score(self.p1points, self.p2points)
-        return result
+            if self.p1points == self.p2points:
+                score_data['player_in_advantage'] = False
+        return result, score_data
 
-    def _print_score(self, scoreData):
-        result = scoreData
+    def _print_score(self, score_data, result):
+        if score_data.get('game_over'):
+            return self._return_winner(score_data['player_in_advantage'])
+        if score_data.get('advantage_mode'):
+            if score_data.get('player_in_advantage', None) is False:
+                return self._convert_tie_points_to_tennis_score(self.p1points)
+            return self._return_advantage(score_data['player_in_advantage'])
+        else:
+            if score_data.get('player_in_advantage', None) is False:
+                return self._convert_tie_points_to_tennis_score(self.p1points)
+            return self._covert_intermediate_points_to_tennis_score(self.p1points, self.p2points)
+
         return result
 
     @staticmethod
