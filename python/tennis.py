@@ -15,31 +15,26 @@ class TennisGame1:
             self.p2points += 1
 
     def score(self):
-        result, score_data = self._compute_score()
-        result = self._print_score(score_data, result)
-        return result
+        score_data = self._compute_score()
+        return self._print_score(score_data)
 
     def _compute_score(self):
         score_data = {}
-        result = None
+        if self.p1points == self.p2points:
+            score_data['player_in_advantage'] = False
+        elif self.p1points > self.p2points:
+            score_data['player_in_advantage'] = self.player_1_name
+        else:
+            score_data['player_in_advantage'] = self.player_2_name
 
         if self.p1points >= 4 or self.p2points >= 4:
             score_data['advantage_mode'] = True
-            if self.p1points == self.p2points:
-                score_data['player_in_advantage'] = False
-            else:
-                if self.p1points > self.p2points:
-                    score_data['player_in_advantage'] = self.player_1_name
-                else:
-                    score_data['player_in_advantage'] = self.player_2_name
-                if abs(self.p1points - self.p2points) >= 2:
-                    score_data['game_over'] = True
-        else:
-            if self.p1points == self.p2points:
-                score_data['player_in_advantage'] = False
-        return result, score_data
+            if abs(self.p1points - self.p2points) >= 2:
+                score_data['game_over'] = True
 
-    def _print_score(self, score_data, result):
+        return score_data
+
+    def _print_score(self, score_data):
         if score_data.get('game_over'):
             return self._return_winner(score_data['player_in_advantage'])
         if score_data.get('advantage_mode'):
