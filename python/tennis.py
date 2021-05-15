@@ -20,8 +20,9 @@ class TennisGame1:
 
     def _compute_score(self):
         score_data = {}
+
         if self.p1points == self.p2points:
-            score_data['player_in_advantage'] = False
+            score_data['player_in_advantage'] = None
         elif self.p1points > self.p2points:
             score_data['player_in_advantage'] = self.player_1_name
         else:
@@ -36,44 +37,27 @@ class TennisGame1:
 
     def _print_score(self, score_data):
         if score_data.get('game_over'):
-            return self._return_winner(score_data['player_in_advantage'])
-        if score_data.get('advantage_mode'):
-            if score_data.get('player_in_advantage', None) is False:
-                return self._convert_tie_points_to_tennis_score(self.p1points)
-            return self._return_advantage(score_data['player_in_advantage'])
+            return f"Win for {score_data['player_in_advantage']}"
+        if score_data.get('advantage_mode') \
+                and score_data.get('player_in_advantage'):
+            return f"Advantage {score_data['player_in_advantage']}"
+
+        if not score_data.get('player_in_advantage'):
+            return self._convert_tie_points(self.p1points)
+        return f'{self._convert_tennis_points(self.p1points)}-' \
+               f'{self._convert_tennis_points(self.p2points)}'
+
+    def _convert_tie_points(self, points):
+        if points < 3:
+            return f"{self._convert_tennis_points(points)}-All"
         else:
-            if score_data.get('player_in_advantage', None) is False:
-                return self._convert_tie_points_to_tennis_score(self.p1points)
-            return self._covert_intermediate_points_to_tennis_score(self.p1points, self.p2points)
-
-        return result
+            return "Deuce"
 
     @staticmethod
-    def _convert_tie_points_to_tennis_score(points1):
-        return {
-            0: "Love-All",
-            1: "Fifteen-All",
-            2: "Thirty-All",
-        }.get(points1, "Deuce")
-
-    def _covert_intermediate_points_to_tennis_score(self, p1points, p2points):
-        result = f'{self._convert_points_to_tennis_score(p1points)}-' \
-                 f'{self._convert_points_to_tennis_score(p2points)}'
-        return result
-
-    @staticmethod
-    def _convert_points_to_tennis_score(points):
+    def _convert_tennis_points(points):
         return {
             0: "Love",
             1: "Fifteen",
             2: "Thirty",
             3: "Forty",
         }[points]
-
-    @staticmethod
-    def _return_advantage(player_name):
-        return "Advantage " + player_name
-
-    @staticmethod
-    def _return_winner(player_name):
-        return "Win for " + player_name
