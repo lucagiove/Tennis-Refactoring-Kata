@@ -2,13 +2,16 @@ class Score:
     def __init__(self, player_1, player_2):
         self.player_1 = player_1
         self.player_2 = player_2
-        self.player_in_advantage = None
+        self._player_in_advantage = None
 
-    def compute_score(self):
+    @property
+    def player_in_advantage(self):
         if self.player_1.points > self.player_2.points:
-            self.player_in_advantage = self.player_1.name
+            self._player_in_advantage = self.player_1
         else:
-            self.player_in_advantage = self.player_2.name
+            self._player_in_advantage = self.player_2
+
+        return self._player_in_advantage
 
     def print_score(self):
         return f'{self._convert_tennis_points(self.player_1.points)}-' \
@@ -37,9 +40,9 @@ class TieScore(Score):
 
 class GameOver(Score):
     def print_score(self):
-        return f"Win for {self.player_in_advantage}"
+        return f"Win for {self.player_in_advantage.name}"
 
 
 class AdvantageScore(Score):
     def print_score(self):
-        return f"Advantage {self.player_in_advantage}"
+        return f"Advantage {self.player_in_advantage.name}"
