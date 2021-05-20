@@ -29,8 +29,8 @@ class TennisGame1:
 
     def score(self):
         self.current_score = self._create_score()
-        score_data = self.current_score.compute_score()
-        return self.current_score.print_score(score_data)
+        self.current_score.compute_score()
+        return self.current_score.print_score()
 
 
 class Player:
