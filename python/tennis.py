@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from score import Score, TieScore, GameOver, AdvantageScore
+from score import Score
 
 
 class TennisGame1:
@@ -15,20 +15,8 @@ class TennisGame1:
         else:
             self.player_2.won_point()
 
-    def _create_score(self):
-        if self.player_1.points == self.player_2.points:
-            return TieScore(self.player_1, self.player_2)
-
-        if self.player_1.points >= 4 or self.player_2.points >= 4:
-            if abs(self.player_1.points - self.player_2.points) >= 2:
-                return GameOver(self.player_1, self.player_2)
-            else:
-                return AdvantageScore(self.player_1, self.player_2)
-
-        return Score(self.player_1, self.player_2)
-
     def score(self):
-        self.current_score = self._create_score()
+        self.current_score = Score.create_score(self.player_1, self.player_2)
         return self.current_score.print_score()
 
 
@@ -39,4 +27,3 @@ class Player:
 
     def won_point(self):
         self.points += 1
-

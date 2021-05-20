@@ -4,11 +4,28 @@ class Score:
         self.player_2 = player_2
         self._player_in_advantage = None
 
+    @staticmethod
+    def create_score(player_1, player_2):
+        if player_1.points == player_2.points:
+            return TieScore(player_1, player_2)
+
+        if player_1.points >= 4 or player_2.points >= 4:
+            if abs(player_1.points - player_2.points) >= 2:
+                return GameOver(player_1, player_2)
+            else:
+                return AdvantageScore(player_1, player_2)
+
+        return Score(player_1, player_2)
+
     @property
     def player_in_advantage(self):
-        if self.player_1.points > self.player_2.points:
+        if self.player_1.points == self.player_2.points:
+            self._player_in_advantage = None
+
+        elif self.player_1.points > self.player_2.points:
             self._player_in_advantage = self.player_1
-        else:
+
+        elif self.player_1.points < self.player_2.points:
             self._player_in_advantage = self.player_2
 
         return self._player_in_advantage
