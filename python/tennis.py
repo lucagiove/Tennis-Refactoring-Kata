@@ -5,6 +5,7 @@ class TennisGame1:
     def __init__(self, player_1_name, player_2_name):
         self.player_1 = Player(player_1_name)
         self.player_2 = Player(player_2_name)
+        self._score = Score(self.player_1, self.player_2)
 
     def won_point(self, player_name):
         if player_name == self.player_1.name:
@@ -13,8 +14,23 @@ class TennisGame1:
             self.player_2.won_point()
 
     def score(self):
-        score_data = self._compute_score()
-        return self._print_score(score_data)
+        score_data = self._score._compute_score()
+        return self._score._print_score(score_data)
+
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.points = 0
+
+    def won_point(self):
+        self.points += 1
+
+
+class Score:
+    def __init__(self, player_1, player_2):
+        self.player_1 = player_1
+        self.player_2 = player_2
 
     def _compute_score(self):
         score_data = {}
@@ -59,13 +75,3 @@ class TennisGame1:
             2: "Thirty",
             3: "Forty",
         }[points]
-
-
-class Player:
-
-    def __init__(self, name):
-        self.name = name
-        self.points = 0
-
-    def won_point(self):
-        self.points += 1
