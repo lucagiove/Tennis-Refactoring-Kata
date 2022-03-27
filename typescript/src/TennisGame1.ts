@@ -20,25 +20,38 @@ export class TennisGame1 implements TennisGame {
     }
 
     getScore(): string {
-        if (!this.playerInAdvantage())
-            return this.tieScoreNameFor(this.player1Score);
+
+        if (this.gameIsOver())
+            return `Win for ${this.playerInAdvantage()}`;
+
 
         if (this.gameIsAdvantage())
             return `Advantage ${this.playerInAdvantage()}`;
 
-        if (this.gameIsOver())
-                return `Win for ${this.playerInAdvantage()}`;
 
-        return `${this.scoreNameFor(this.player1Score)}-${this.scoreNameFor(this.player2Score)}`
+        if (this.gameInProgress())
+            return `${TennisGame1.scoreNameFor(this.player1Score)}-${TennisGame1.scoreNameFor(this.player2Score)}`
 
+
+        if (this.gameIsTie())
+            return TennisGame1.tieScoreNameFor(this.player1Score);
+
+    }
+
+    private gameInProgress() {
+        return !(this.gameIsTie() || this.gameIsAdvantage() || this.gameIsOver());
+    }
+
+    private gameIsTie() {
+        return !this.playerInAdvantage();
     }
 
     private gameIsAdvantage() {
-        return (this.scoreDifference() === 1) && (this.player1Score >= 4 || this.player2Score >= 4) ;
+        return (this.scoreDifference() === 1) && (this.player1Score >= 4 || this.player2Score >= 4);
     }
 
     private gameIsOver() {
-        return (this.scoreDifference() >= 2) && (this.player1Score >= 4 || this.player2Score >= 4) ;
+        return (this.scoreDifference() >= 2) && (this.player1Score >= 4 || this.player2Score >= 4);
     }
 
     private scoreDifference() {
@@ -53,7 +66,7 @@ export class TennisGame1 implements TennisGame {
         return null
     }
 
-    private scoreNameFor(score: number) {
+    private static scoreNameFor(score: number) {
         switch (score) {
             case 0:
                 return 'Love';
@@ -62,29 +75,15 @@ export class TennisGame1 implements TennisGame {
             case 2:
                 return 'Thirty';
             case 3:
-                return'Forty';
+                return 'Forty';
             default:
-                throw new Error("Score name unknown")
+                throw new Error(`Score name unknown for: ${score}`)
         }
     }
 
-    private tieScoreNameFor(score: number) {
-        let result: string
-        switch (score) {
-            case 0:
-                result = 'Love-All';
-                break;
-            case 1:
-                result = 'Fifteen-All';
-                break;
-            case 2:
-                result = 'Thirty-All';
-                break;
-            default:
-                result = 'Deuce';
-                break;
-
-        }
-        return result;
+    private static tieScoreNameFor(score: number) {
+        if(score > 2)
+            return "Deuce"
+        return `${TennisGame1.scoreNameFor(score)}-All`;
     }
 }
