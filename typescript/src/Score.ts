@@ -1,12 +1,12 @@
-class Score {
-    constructor(protected m_score1: number, protected m_score2: number) {
+abstract class Score {
+    protected constructor(protected m_score1: number, protected m_score2: number) {
     }
 
-    public canBeApplied(): boolean {
+    public isCurrentScore(): boolean {
         throw new Error('Not Implemented')
     }
 
-    public calculate(): string {
+    public render(): string {
         throw new Error('Not Implemented')
     }
 
@@ -28,11 +28,11 @@ export class InProgressScore extends Score {
         super(m_score1, m_score2);
     }
 
-    public canBeApplied(): boolean {
+    public isCurrentScore(): boolean {
         return (this.m_score1 !== this.m_score2) && (this.m_score1 < 4 && this.m_score2 < 4);
     }
 
-    public calculate(): string {
+    public render(): string {
         let tempScore: number = 0;
         let score = ''
         for (let i = 1; i < 3; i++) {
@@ -65,11 +65,11 @@ export class TieScore extends Score {
         super(m_score1, m_score2);
     }
 
-    public canBeApplied(): boolean {
+    public isCurrentScore(): boolean {
         return this.m_score1 === this.m_score2;
     }
 
-    public calculate(): string {
+    public render(): string {
         switch (this.m_score1) {
             case 0:
                 return 'Love-All';
@@ -88,11 +88,11 @@ export class AdvantageScore extends Score {
         super(m_score1, m_score2);
     }
 
-    public canBeApplied(): boolean {
+    public isCurrentScore(): boolean {
         return (this.m_score1 >= 4 || this.m_score2 >= 4) && (Math.abs(this.scoreDifference()) === 1);
     }
 
-    public calculate(): string {
+    public render(): string {
         return `Advantage ${this.playerInAdvantage()}`;
 
     }
@@ -103,11 +103,11 @@ export class EndScore extends Score {
         super(m_score1, m_score2);
     }
 
-    public canBeApplied(): boolean {
+    public isCurrentScore(): boolean {
         return (this.m_score1 >= 4 || this.m_score2 >= 4) && (Math.abs(this.scoreDifference()) > 1);
     }
 
-    public calculate(): string {
+    public render(): string {
         if (this.scoreDifference() >= 2) return 'Win for player1';
         return 'Win for player2';
     }

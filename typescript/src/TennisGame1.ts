@@ -27,8 +27,8 @@ export class TennisGame1 implements TennisGame {
 
         const possibleScores = [inProgressScore, tieScore, advantageScore, gameOverScore]
 
-        const currentScore = possibleScores.filter((s) => s.canBeApplied())[0]
-        return currentScore.calculate()
+        const currentScore = possibleScores.filter((s) => s.isCurrentScore())[0]
+        return currentScore.render()
 
         throw new Error('What game are you playing?')
     }
