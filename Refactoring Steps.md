@@ -1,4 +1,4 @@
-# Kata refactoring
+# Kata refactoring steps
 
 ## Simplifying Conditional Logic
 
